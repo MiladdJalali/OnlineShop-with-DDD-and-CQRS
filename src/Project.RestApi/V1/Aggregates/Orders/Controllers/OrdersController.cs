@@ -11,6 +11,7 @@ using Project.Application.Aggregates.Orders.Commands.DeleteOrder;
 using Project.Application.Aggregates.Orders.Commands.UpdateOrder;
 using Project.Application.Aggregates.Orders.Queries.GetOrderById;
 using Project.Application.Aggregates.Orders.Queries.GetOrderCollection;
+using Project.Application.Aggregates.Orders.Queries.GetOrderItems;
 using Project.RestApi.V1.Aggregates.Orders.Models;
 using Project.RestApi.V1.Models;
 
@@ -76,6 +77,21 @@ namespace Project.RestApi.V1.Aggregates.Orders.Controllers
                 return NotFound();
 
             return Ok(new ResponseModel<OrderResponse> {Values = queryResult.Adapt<OrderResponse>()});
+        }
+
+        [HttpGet("{orderId:guid}/Items")]
+        public async Task<ActionResult<ResponseCollectionModel<OrderItemResponse[]>>> GetOrderItems(
+            Guid orderId,
+            CancellationToken cancellationToken)
+        {
+            var query = new GetOrderItemsQuery {OrderId = orderId};
+            var queryResult = await mediator.Send(query, cancellationToken).ConfigureAwait(false);
+
+            return Ok(new ResponseCollectionModel<OrderItemResponse>
+            {
+                Values = queryResult.Result.Select(i => i.Adapt<OrderItemResponse>()).ToArray(),
+                TotalCount = queryResult.TotalCount
+            });
         }
 
         [HttpPut("{orderId:guid}")]

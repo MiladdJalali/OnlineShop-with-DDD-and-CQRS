@@ -10,6 +10,10 @@ namespace Project.Application.Aggregates.Orders
     {
         IQueryable<OrderQueryResult> GetAll();
 
-        Task<OrderQueryResult> GetById(Guid id, CancellationToken cancellationToken = default);
+        Task<OrderQueryResult> GetById(
+            Guid id, CancellationToken cancellationToken = default);
+
+        Task<OrderItemQueryResult[]> GetOrderItems(
+            Guid orderId, CancellationToken cancellationToken = default);
     }
 }

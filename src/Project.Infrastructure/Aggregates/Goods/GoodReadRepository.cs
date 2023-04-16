@@ -34,11 +34,11 @@ namespace Project.Infrastructure.Aggregates.Goods
                     LEFT JOIN   ""Users""       AS UU   ON G.""UpdaterId""      = UU.""Id""");
         }
 
-        public async Task<GoodQueryResult> GetByName(
+        public Task<GoodQueryResult> GetByName(
             string goodName,
             CancellationToken cancellationToken = default)
         {
-            return await dbContext.GoodQueryResults.FromSqlRaw(@"
+            return dbContext.GoodQueryResults.FromSqlRaw(@"
                     SELECT      G.""Id"",
                                 G.""Name"",
                                 G.""Price"",
@@ -53,9 +53,7 @@ namespace Project.Infrastructure.Aggregates.Goods
                     LEFT JOIN   ""Users""       AS UC   ON G.""CreatorId""      = UC.""Id""
                     LEFT JOIN   ""Users""       AS UU   ON G.""UpdaterId""      = UU.""Id""
                     WHERE       G.""Name"" = {0}
-                ", goodName)
-                .FirstOrDefaultAsync(cancellationToken)
-                .ConfigureAwait(false);
+                ", goodName).FirstOrDefaultAsync(cancellationToken);
         }
     }
 }

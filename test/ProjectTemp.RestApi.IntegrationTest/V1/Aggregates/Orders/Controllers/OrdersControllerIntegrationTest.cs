@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Project.Domain.Aggregates.Orders.Enums;
@@ -9,15 +10,18 @@ using Xunit;
 namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
 {
     [Collection(nameof(TestFixtureCollection))]
-    public class OrdersControllerIntegrationTest : BaseControllerIntegrationTest
+    public partial class OrdersControllerIntegrationTest : BaseControllerIntegrationTest
     {
         public OrdersControllerIntegrationTest(TestFixture testFixture)
             : base(testFixture)
         {
+            client = testFixture.Client;
         }
 
         protected override string BaseUrl { get; } = "/rest/api/v1/Orders";
 
+        private readonly HttpClient client;
+        
         [Fact]
         public async Task TestAll_WhenEverythingIsOk_StatusMustBeCorrect()
         {
@@ -31,7 +35,6 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
             var createResponse = await Create<OrderResponse>(createRequest);
 
             createResponse.Status.Should().Be(OrderStatus.Received.ToString());
-            createResponse.Items.Should().HaveCount(2);
             createResponse.Description.Should().Be(createRequest.Description);
 
             // Update
@@ -53,6 +56,11 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
 
             getAllResponse.Values.Should().HaveCount(1);
             getAllResponse.TotalCount.Should().Be(1);
+
+            // GetItems
+            var getOrderItemsResponse = await GetItems(createResponse.Id);
+            
+            getOrderItemsResponse.TotalCount.Should().Be(2);
 
             await Delete(createResponse.Id.ToString());
         }

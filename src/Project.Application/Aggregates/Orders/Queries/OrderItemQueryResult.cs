@@ -1,20 +1,19 @@
 ﻿using System;
-using Project.Application.Aggregates.Goods.Queries;
 
 namespace Project.Application.Aggregates.Orders.Queries
 {
     public class OrderItemQueryResult
     {
-        public Guid OrderId { get; set; }
+        public Guid Id { get; set; }
 
-        public OrderQueryResult Order { get; set; }
+        public string Name { get; set; }
 
-        public Guid GoodId { get; set; }
+        public decimal Price { get; set; }
 
-        public GoodQueryResult Good { get; set; }
+        public decimal Discount { get; set; }
 
-        public string OrderPostType { get; set; }
+        public bool IsFragile { get; set; }
 
-        public int Count { get; set; }
+        public string Description { get; set; }
     }
 }

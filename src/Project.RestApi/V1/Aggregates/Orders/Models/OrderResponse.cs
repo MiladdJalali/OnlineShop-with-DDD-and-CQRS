@@ -19,7 +19,5 @@ namespace Project.RestApi.V1.Aggregates.Orders.Models
         public DateTimeOffset Created { get; set; }
 
         public DateTimeOffset? Updated { get; set; }
-
-        public OrderItemResponse[] Items { get; set; }
     }
 }
