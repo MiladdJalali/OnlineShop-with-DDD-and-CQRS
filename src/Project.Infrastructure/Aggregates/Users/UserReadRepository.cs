@@ -33,11 +33,11 @@ namespace Project.Infrastructure.Aggregates.Users
                 ");
         }
 
-        public async Task<UserQueryResult> GetByUsername(
+        public Task<UserQueryResult> GetByUsername(
             string username,
             CancellationToken cancellationToken = default)
         {
-            return await dbContext.UserQueryResults.FromSqlRaw(@"
+            return dbContext.UserQueryResults.FromSqlRaw(@"
                     SELECT      U.""Id"",
                                 U.""Username"",
                                 U.""Address"",
@@ -50,9 +50,7 @@ namespace Project.Infrastructure.Aggregates.Users
                     LEFT JOIN   ""Users""       AS UC   ON U.""CreatorId""      = UC.""Id""
                     LEFT JOIN   ""Users""       AS UU   ON U.""UpdaterId""      = UU.""Id""
                     WHERE       U.""Username"" = {0}
-                ", username)
-                .FirstOrDefaultAsync(cancellationToken)
-                .ConfigureAwait(false);
+                ", username).FirstOrDefaultAsync(cancellationToken);
         }
     }
 }

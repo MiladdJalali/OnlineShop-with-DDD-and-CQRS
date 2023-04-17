@@ -19,16 +19,13 @@ namespace Project.Infrastructure
         public DbSet<GoodQueryResult> GoodQueryResults { get; private set; }
 
         public DbSet<OrderQueryResult> OrderQueryResults { get; private set; }
-
+        
         public DbSet<OrderItemQueryResult> OrderItemQueryResults { get; private set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("citext");
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            modelBuilder.Entity<OrderItemQueryResult>().HasKey(m => new {m.OrderId, m.GoodId});
-            modelBuilder.Entity<OrderQueryResult>().Ignore(m => m.TotalPrice);
 
             base.OnModelCreating(modelBuilder);
         }

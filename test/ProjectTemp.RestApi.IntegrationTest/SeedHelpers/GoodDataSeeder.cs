@@ -41,7 +41,7 @@ namespace Project.RestApi.IntegrationTest.SeedHelpers
 
         private static readonly Guid FirstGoodId = Guid.NewGuid();
 
-        private const bool FirstGoodIsFragile = false;
+        public const bool FirstGoodIsFragile = false;
 
         #endregion
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Project.Application.Aggregates.Orders.Queries
 {
@@ -20,7 +19,5 @@ namespace Project.Application.Aggregates.Orders.Queries
         public DateTimeOffset Created { get; set; }
 
         public DateTimeOffset? Updated { get; set; }
-
-        public IEnumerable<OrderItemQueryResult> Items { get; set; }
     }
 }

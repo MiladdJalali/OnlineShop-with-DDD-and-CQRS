@@ -1,18 +1,19 @@
 ﻿using System;
-using Project.RestApi.V1.Aggregates.Goods.Models;
 
 namespace Project.RestApi.V1.Aggregates.Orders.Models
 {
     public class OrderItemResponse
     {
-        public Guid OrderId { get; set; }
+        public Guid Id { get; set; }
 
-        public Guid GoodId { get; set; }
+        public string Name { get; set; }
 
-        public GoodResponse Good { get; private init; }
+        public decimal Price { get; set; }
 
-        public string OrderPostType { get; private init; }
+        public decimal Discount { get; set; }
 
-        public int Count { get; private init; }
+        public bool IsFragile { get; set; }
+
+        public string Description { get; set; }
     }
 }
