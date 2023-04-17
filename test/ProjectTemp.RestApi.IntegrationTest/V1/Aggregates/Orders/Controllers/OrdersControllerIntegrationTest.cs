@@ -36,6 +36,7 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
             var createResponse = await Create<OrderResponse>(createRequest);
 
             createResponse.Status.Should().Be(OrderStatus.Received.ToString());
+            createResponse.PostType.Should().Be(OrderPostType.SpecialPost.ToString());
             createResponse.Description.Should().Be(createRequest.Description);
 
             // Update
@@ -56,6 +57,10 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
             var getAllResponse = await GetAll<OrderResponse>(getAllParameters);
 
             getAllResponse.Values.Should().HaveCount(1);
+            getAllResponse.Values.First().Status.Should().Be(OrderStatus.Received.ToString());
+            getAllResponse.Values.First().PostType.Should().Be(OrderPostType.OrdinaryPost.ToString());
+            getAllResponse.Values.First().Description.Should().Be(updateRequest.Description);
+            
             getAllResponse.TotalCount.Should().Be(1);
 
             // GetItems

@@ -136,48 +136,154 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
         }
 
         [Fact]
+        public void TestChangeOrderPostType_WhenEverythingIsOkAndIsFragileIsTrue_PropertiesShouldHaveCorrectValues()
+        {
+            var order = new OrderBuilder().Build();
+
+            order.ClearEvents();
+
+            order.ChangOrderPostType(true, Guid.NewGuid());
+
+            order.PostType.Should().Be(OrderPostType.SpecialPost);
+
+            var orderPostTypeChangedEvent = order.AssertPublishedDomainEvent<OrderPostTypeChangedEvent>();
+
+            order.DomainEvents.Should().HaveCount(1);
+            orderPostTypeChangedEvent.AggregateId.Should().Be(order.Id.Value);
+            orderPostTypeChangedEvent.OldValue.Should().BeNull();
+            orderPostTypeChangedEvent.NewValue.Should().Be(OrderPostType.SpecialPost.ToString());
+        }
+
+        [Fact]
+        public void TestChangeOrderPostType_WhenEverythingIsOkAndIsFragileIsFalse_PropertiesShouldHaveCorrectValues()
+        {
+            var order = new OrderBuilder().Build();
+
+            order.ClearEvents();
+
+            order.ChangOrderPostType(false, Guid.NewGuid());
+
+            order.PostType.Should().Be(OrderPostType.OrdinaryPost);
+
+            var orderPostTypeChangedEvent = order.AssertPublishedDomainEvent<OrderPostTypeChangedEvent>();
+
+            order.DomainEvents.Should().HaveCount(1);
+            orderPostTypeChangedEvent.AggregateId.Should().Be(order.Id.Value);
+            orderPostTypeChangedEvent.OldValue.Should().BeNull();
+            orderPostTypeChangedEvent.NewValue.Should().Be(OrderPostType.OrdinaryPost.ToString());
+        }
+
+        [Fact]
+        public void TestChangeOrderPostType_WhenContainsFragileItemAndOrderPostTypeIsSpecial_NothingMustBeHappened()
+        {
+            var order = new OrderBuilder().Build();
+
+            order.ChangOrderPostType(true, Guid.NewGuid());
+            order.PostType.Should().Be(OrderPostType.SpecialPost);
+
+            order.ClearEvents();
+
+            order.ChangOrderPostType(true, Guid.NewGuid());
+            order.DomainEvents.Should().HaveCount(0);
+        }
+
+        [Fact]
+        public void
+            TestChangeOrderPostType_WhenDoNotContainsFragileItemAndOrderPostTypeIsOridnary_NothingMustBeHappened()
+        {
+            var order = new OrderBuilder().Build();
+
+            order.ChangOrderPostType(false, Guid.NewGuid());
+            order.PostType.Should().Be(OrderPostType.OrdinaryPost);
+
+            order.ClearEvents();
+
+            order.ChangOrderPostType(false, Guid.NewGuid());
+            order.DomainEvents.Should().HaveCount(0);
+        }
+
+        [Fact]
+        public void
+            TestChangeOrderPostType_WhenDoNotContainFragileItemAndOrderPostTypeIsOrdinary_PropertiesShouldHaveCorrectValues()
+        {
+            var order = new OrderBuilder().Build();
+
+            order.ChangOrderPostType(false, Guid.NewGuid());
+
+            order.ClearEvents();
+
+            order.ChangOrderPostType(true, Guid.NewGuid());
+            order.PostType.Should().Be(OrderPostType.SpecialPost);
+
+            var orderPostTypeChangedEvent = order.AssertPublishedDomainEvent<OrderPostTypeChangedEvent>();
+
+            order.DomainEvents.Should().HaveCount(1);
+            orderPostTypeChangedEvent.AggregateId.Should().Be(order.Id.Value);
+            orderPostTypeChangedEvent.OldValue.Should().Be(OrderPostType.OrdinaryPost.ToString());
+            orderPostTypeChangedEvent.NewValue.Should().Be(OrderPostType.SpecialPost.ToString());
+        }
+
+        [Fact]
+        public void
+            TestChangeOrderPostType_WhenContainFragileItemAndOrderPostTypeIsSpecial_PropertiesShouldHaveCorrectValues()
+        {
+            var order = new OrderBuilder().Build();
+
+            order.ChangOrderPostType(true, Guid.NewGuid());
+
+            order.ClearEvents();
+
+            order.ChangOrderPostType(false, Guid.NewGuid());
+            order.PostType.Should().Be(OrderPostType.OrdinaryPost);
+
+            var orderPostTypeChangedEvent = order.AssertPublishedDomainEvent<OrderPostTypeChangedEvent>();
+
+            order.DomainEvents.Should().HaveCount(1);
+            orderPostTypeChangedEvent.AggregateId.Should().Be(order.Id.Value);
+            orderPostTypeChangedEvent.OldValue.Should().Be(OrderPostType.SpecialPost.ToString());
+            orderPostTypeChangedEvent.NewValue.Should().Be(OrderPostType.OrdinaryPost.ToString());
+        }
+
+        [Fact]
         public void TestChangeItems_WhenEverythingIsOk_PropertiesShouldHaveCorrectValues()
         {
-            var firstOrderItem = OrderItem.Create(GoodId.Create(Guid.NewGuid()), GoodIsFragile.Create(true), 2);
-            var secondOrderItem = OrderItem.Create(GoodId.Create(Guid.NewGuid()), GoodIsFragile.Create(false), 1);
+            var firstOrderItem = OrderItem.Create(GoodId.Create(Guid.NewGuid()), 2);
+            var secondOrderItem = OrderItem.Create(GoodId.Create(Guid.NewGuid()), 1);
 
             var validator = new Mock<IGoodsTotalPriceValidator>();
             validator.Setup(i => i.IsTotalPriceValid(It.IsAny<IEnumerable<Guid>>())).Returns(Task.FromResult(true));
 
             var order = new OrderBuilder().Build();
 
-            order.ChangeItems(new[] { firstOrderItem, secondOrderItem }, validator.Object);
+            order.ChangeItems(new[] {firstOrderItem, secondOrderItem}, validator.Object);
 
             order.DomainEvents.Should().HaveCount(3);
 
             var firstItem = order.OrderItems.First(i => i.GoodId == firstOrderItem.GoodId);
-            firstItem.OrderPostType.Should().Be(OrderPostType.SpecialPost);
             firstItem.Count.Should().Be(2);
 
             var secondItem = order.OrderItems.First(i => i.GoodId == secondOrderItem.GoodId);
-            secondItem.OrderPostType.Should().Be(OrderPostType.OrdinaryPost);
             secondItem.Count.Should().Be(1);
         }
 
         [Fact]
         public void TestChangeItems_WhenOrderItemsUpdated_PropertiesShouldHaveCorrectValues()
         {
-            var firstOrderItem = OrderItem.Create(GoodId.Create(Guid.NewGuid()), GoodIsFragile.Create(true), 2);
+            var firstOrderItem = OrderItem.Create(GoodId.Create(Guid.NewGuid()), 2);
 
             var validator = new Mock<IGoodsTotalPriceValidator>();
             validator.Setup(i => i.IsTotalPriceValid(It.IsAny<IEnumerable<Guid>>())).Returns(Task.FromResult(true));
 
             var order = new OrderBuilder().Build();
 
-            order.ChangeItems(new[] { firstOrderItem }, validator.Object);
+            order.ChangeItems(new[] {firstOrderItem}, validator.Object);
 
-            var secondOrderItem = OrderItem.Create(GoodId.Create(Guid.NewGuid()), GoodIsFragile.Create(false), 1);
+            var secondOrderItem = OrderItem.Create(GoodId.Create(Guid.NewGuid()), 1);
 
-            order.ChangeItems(new[] { secondOrderItem }, validator.Object);
+            order.ChangeItems(new[] {secondOrderItem}, validator.Object);
 
             order.OrderItems.Should().HaveCount(1);
             order.OrderItems.First().GoodId.Should().Be(secondOrderItem.GoodId);
-            order.OrderItems.First().OrderPostType.Should().Be(OrderPostType.OrdinaryPost);
             order.OrderItems.First().Count.Should().Be(1);
         }
 

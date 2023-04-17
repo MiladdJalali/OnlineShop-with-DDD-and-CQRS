@@ -29,6 +29,12 @@ namespace Project.Infrastructure.Aggregates.Orders.Configurations
                     v => v.ToString(),
                     v => (OrderStatus) Enum.Parse(typeof(OrderStatus), v));
 
+            builder.Property(e => e.PostType)
+                .IsRequired()
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (OrderPostType) Enum.Parse(typeof(OrderPostType), v));
+
             builder.OwnsMany(i => i.OrderItems, j =>
             {
                 j.ToTable("OrderItems");
@@ -36,8 +42,6 @@ namespace Project.Infrastructure.Aggregates.Orders.Configurations
                 j.Property(k => k.GoodId).HasConversion(i => i.Value, i => GoodId.Create(i));
                 j.HasOne<Good>().WithMany().HasForeignKey(i => i.GoodId).OnDelete(DeleteBehavior.Restrict);
                 j.Property(k => k.Count).IsRequired();
-                j.Property(k => k.OrderPostType).HasConversion(v => v.ToString(),
-                    v => (OrderPostType) Enum.Parse(typeof(OrderPostType), v));
             });
 
             base.Configure(builder);

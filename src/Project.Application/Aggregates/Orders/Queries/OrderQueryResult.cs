@@ -7,6 +7,8 @@ namespace Project.Application.Aggregates.Orders.Queries
         public Guid Id { get; set; }
 
         public string Status { get; set; }
+        
+        public string PostType { get; set; }
 
         public decimal TotalPrice { get; set; }
 
