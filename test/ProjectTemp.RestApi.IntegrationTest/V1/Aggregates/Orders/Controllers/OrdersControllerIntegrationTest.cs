@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -12,6 +13,8 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
     [Collection(nameof(TestFixtureCollection))]
     public partial class OrdersControllerIntegrationTest : BaseControllerIntegrationTest
     {
+        private readonly HttpClient client;
+
         public OrdersControllerIntegrationTest(TestFixture testFixture)
             : base(testFixture)
         {
@@ -20,15 +23,13 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
 
         protected override string BaseUrl { get; } = "/rest/api/v1/Orders";
 
-        private readonly HttpClient client;
-        
         [Fact]
         public async Task TestAll_WhenEverythingIsOk_StatusMustBeCorrect()
         {
             // Create
             var createRequest = new OrderRequest
             {
-                GoodsName = new[] {GoodDataSeeder.FirstGoodName, GoodDataSeeder.SecondGoodName},
+                GoodsName = new[] { GoodDataSeeder.FirstGoodName, GoodDataSeeder.SecondGoodName },
                 Description = nameof(OrderRequest.Description)
             };
 
@@ -40,7 +41,7 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
             // Update
             var updateRequest = new OrderRequest
             {
-                GoodsName = new[] {GoodDataSeeder.FirstGoodName},
+                GoodsName = new[] { GoodDataSeeder.FirstGoodName },
                 Description = $"{nameof(OrderRequest.Description)}Updated"
             };
 
@@ -58,9 +59,15 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
             getAllResponse.TotalCount.Should().Be(1);
 
             // GetItems
-            var getOrderItemsResponse = await GetItems(createResponse.Id);
-            
-            getOrderItemsResponse.TotalCount.Should().Be(2);
+            var getItemsResponse = await GetItems(createResponse.Id);
+
+            getItemsResponse.TotalCount.Should().Be(1);
+            getItemsResponse.Values.First().Name.Should().Be(GoodDataSeeder.FirstGoodName);
+            getItemsResponse.Values.First().Price.Should().Be(GoodDataSeeder.FirstGoodPrice);
+            getItemsResponse.Values.First().Discount.Should().Be(GoodDataSeeder.FirstGoodDiscount);
+            getItemsResponse.Values.First().IsFragile.Should().Be(GoodDataSeeder.FirstGoodIsFragile);
+            getItemsResponse.Values.First().Name.Should().Be(GoodDataSeeder.FirstGoodName);
+            getItemsResponse.Values.First().Description.Should().BeNull();
 
             await Delete(createResponse.Id.ToString());
         }
@@ -70,7 +77,7 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
         {
             var createRequest = new OrderRequest
             {
-                GoodsName = new[] {GoodDataSeeder.SecondGoodName},
+                GoodsName = new[] { GoodDataSeeder.SecondGoodName },
                 Description = nameof(OrderRequest.Description)
             };
 

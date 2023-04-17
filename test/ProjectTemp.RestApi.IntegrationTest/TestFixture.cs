@@ -33,7 +33,7 @@ namespace Project.RestApi.IntegrationTest
                                         "Server=LocalHost;" +
                                         $"Database=Project{DateTime.Now.Ticks};" +
                                         "User Id=postgres;" +
-                                        "Password=YourPassword;"
+                                        "Password=;"
                                 }
                             })
                         )

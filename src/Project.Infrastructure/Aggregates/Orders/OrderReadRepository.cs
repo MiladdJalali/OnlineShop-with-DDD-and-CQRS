@@ -27,21 +27,21 @@ namespace Project.Infrastructure.Aggregates.Orders
 		                    COALESCE ( UC.""Username"", O.""CreatorId"" :: TEXT ) AS ""Creator"",
 		                    COALESCE ( UU.""Username"", O.""UpdaterId"" :: TEXT ) AS ""Updater"",
 		                    O.""Created"",O.""Updated"",
-		                    B.TotalPrice
+		                    B.""TotalPrice""
                     FROM
 		                    ""Orders"" AS O
 		                    LEFT JOIN ""Users"" AS UC ON O.""CreatorId"" = UC.""Id""
 		                    LEFT JOIN ""Users"" AS UU ON O.""UpdaterId"" = UU.""Id""
 		                    JOIN (
 		                    SELECT A.""Id"",
-					                    SUM (A.TotalPrice) AS TotalPrice
+					                    SUM (A.""TotalPrice"") AS ""TotalPrice""
 	                      FROM
 		                    (
 				                    SELECT
 						                    O.""Id"",
 						                    G.""Price"",
 						                    G.""Discount"",
-						                    ( G.""Price"" - ( G.""Price"" * ( G.""Discount"" / 100 ) ) ) :: INT AS TotalPrice
+						                    ( G.""Price"" - ( G.""Price"" * ( G.""Discount"" / 100 ) ) ) :: INT AS ""TotalPrice""
 				                    FROM
 						                    ""Orders"" AS O
 						                    INNER JOIN ""OrderItems"" AS OI ON O.""Id"" = OI.""OrderId""
@@ -61,21 +61,21 @@ namespace Project.Infrastructure.Aggregates.Orders
 		                    COALESCE ( UC.""Username"", O.""CreatorId"" :: TEXT ) AS ""Creator"",
 		                    COALESCE ( UU.""Username"", O.""UpdaterId"" :: TEXT ) AS ""Updater"",
 		                    O.""Created"",O.""Updated"",
-		                    B.TotalPrice
+		                    B.""TotalPrice""
                     FROM
 		                    ""Orders"" AS O
 		                    LEFT JOIN ""Users"" AS UC ON O.""CreatorId"" = UC.""Id""
 		                    LEFT JOIN ""Users"" AS UU ON O.""UpdaterId"" = UU.""Id""
 		                    JOIN (
 		                    SELECT A.""Id"",
-					                    SUM (A.TotalPrice) AS TotalPrice
+					                    SUM (A.""TotalPrice"") AS ""TotalPrice""
 	                      FROM
 		                    (
 				                    SELECT
 						                    O.""Id"",
 						                    G.""Price"",
 						                    G.""Discount"",
-						                    ( G.""Price"" - ( G.""Price"" * ( G.""Discount"" / 100 ) ) ) :: INT AS TotalPrice
+						                    ( G.""Price"" - ( G.""Price"" * ( G.""Discount"" / 100 ) ) ) :: INT AS ""TotalPrice""
 				                    FROM
 						                    ""Orders"" AS O
 						                    INNER JOIN ""OrderItems"" AS OI ON O.""Id"" = OI.""OrderId""
