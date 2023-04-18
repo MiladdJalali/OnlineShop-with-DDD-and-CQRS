@@ -83,6 +83,13 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
             getItemsResponse.Values.First().Name.Should().Be(GoodDataSeeder.FirstGoodName);
             getItemsResponse.Values.First().Description.Should().BeNull();
 
+            // ChangeStatus
+            var changeOrderStatusRequest = new ChangeOrderStatusRequest {Status = OrderStatus.Packed.ToString()};
+            await ChangeStatus(createResponse.Id, changeOrderStatusRequest);
+
+            var orderResponse = await GetByIdentifier<OrderResponse>(createResponse.Id.ToString());
+            orderResponse.Status.Should().Be(OrderStatus.Packed.ToString());
+
             await Delete(createResponse.Id.ToString());
         }
 

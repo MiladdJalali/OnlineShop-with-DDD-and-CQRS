@@ -66,7 +66,7 @@ namespace Project.Domain.Aggregates.Orders
             Status = status;
         }
 
-        public void ChangOrderPostType(bool containsFragileItem, Guid updaterId)
+        public void ChangPostType(bool containsFragileItem, Guid updaterId)
         {
             switch (containsFragileItem)
             {

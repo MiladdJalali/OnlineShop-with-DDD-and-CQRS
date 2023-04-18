@@ -97,6 +97,24 @@ namespace Project.Application.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid status provided.
+        /// </summary>
+        public static string Order_InvalidStatusProvided {
+            get {
+                return ResourceManager.GetString("Order_InvalidStatusProvided", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Packed or deliverd order can not be updated.
+        /// </summary>
+        public static string Order_PackedOrDeliverdOrderCanNotbeUpdated {
+            get {
+                return ResourceManager.GetString("Order_PackedOrDeliverdOrderCanNotbeUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to find order.
         /// </summary>
         public static string Order_UnableToFind {

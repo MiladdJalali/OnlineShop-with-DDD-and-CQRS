@@ -141,7 +141,7 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
 
             order.ClearEvents();
 
-            order.ChangOrderPostType(true, Guid.NewGuid());
+            order.ChangPostType(true, Guid.NewGuid());
 
             order.PostType.Should().Be(OrderPostType.SpecialPost);
 
@@ -160,7 +160,7 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
 
             order.ClearEvents();
 
-            order.ChangOrderPostType(false, Guid.NewGuid());
+            order.ChangPostType(false, Guid.NewGuid());
 
             order.PostType.Should().Be(OrderPostType.OrdinaryPost);
 
@@ -177,12 +177,12 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
         {
             var order = new OrderBuilder().Build();
 
-            order.ChangOrderPostType(true, Guid.NewGuid());
+            order.ChangPostType(true, Guid.NewGuid());
             order.PostType.Should().Be(OrderPostType.SpecialPost);
 
             order.ClearEvents();
 
-            order.ChangOrderPostType(true, Guid.NewGuid());
+            order.ChangPostType(true, Guid.NewGuid());
             order.DomainEvents.Should().HaveCount(0);
         }
 
@@ -192,12 +192,12 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
         {
             var order = new OrderBuilder().Build();
 
-            order.ChangOrderPostType(false, Guid.NewGuid());
+            order.ChangPostType(false, Guid.NewGuid());
             order.PostType.Should().Be(OrderPostType.OrdinaryPost);
 
             order.ClearEvents();
 
-            order.ChangOrderPostType(false, Guid.NewGuid());
+            order.ChangPostType(false, Guid.NewGuid());
             order.DomainEvents.Should().HaveCount(0);
         }
 
@@ -207,11 +207,11 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
         {
             var order = new OrderBuilder().Build();
 
-            order.ChangOrderPostType(false, Guid.NewGuid());
+            order.ChangPostType(false, Guid.NewGuid());
 
             order.ClearEvents();
 
-            order.ChangOrderPostType(true, Guid.NewGuid());
+            order.ChangPostType(true, Guid.NewGuid());
             order.PostType.Should().Be(OrderPostType.SpecialPost);
 
             var orderPostTypeChangedEvent = order.AssertPublishedDomainEvent<OrderPostTypeChangedEvent>();
@@ -228,11 +228,11 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
         {
             var order = new OrderBuilder().Build();
 
-            order.ChangOrderPostType(true, Guid.NewGuid());
+            order.ChangPostType(true, Guid.NewGuid());
 
             order.ClearEvents();
 
-            order.ChangOrderPostType(false, Guid.NewGuid());
+            order.ChangPostType(false, Guid.NewGuid());
             order.PostType.Should().Be(OrderPostType.OrdinaryPost);
 
             var orderPostTypeChangedEvent = order.AssertPublishedDomainEvent<OrderPostTypeChangedEvent>();

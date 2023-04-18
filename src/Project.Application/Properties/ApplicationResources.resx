@@ -129,6 +129,12 @@
   <data name="Good_UnableToUpdateSystemDefined" xml:space="preserve">
     <value>Unable to update system defined goods</value>
   </data>
+  <data name="Order_InvalidStatusProvided" xml:space="preserve">
+    <value>Invalid status provided</value>
+  </data>
+  <data name="Order_PackedOrDeliverdOrderCanNotbeUpdated" xml:space="preserve">
+    <value>Packed or deliverd order can not be updated</value>
+  </data>
   <data name="Order_UnableToFind" xml:space="preserve">
     <value>Unable to find order</value>
   </data>
