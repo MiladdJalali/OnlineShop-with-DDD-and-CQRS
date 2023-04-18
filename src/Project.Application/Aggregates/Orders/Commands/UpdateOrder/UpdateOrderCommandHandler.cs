@@ -5,6 +5,7 @@ using MediatR;
 using Project.Application.Aggregates.Goods;
 using Project.Application.Properties;
 using Project.Application.Services;
+using Project.Domain.Aggregates.Orders.Enums;
 using Project.Domain.Aggregates.Orders.Services;
 using Project.Domain.Aggregates.Orders.ValueObjects;
 using Project.Domain.Exceptions;
@@ -43,6 +44,9 @@ namespace Project.Application.Aggregates.Orders.Commands.UpdateOrder
             if (order is null)
                 throw new DomainException(ApplicationResources.Order_UnableToFind);
 
+            if (order.Status != OrderStatus.Received)
+                throw new DomainException(ApplicationResources.Order_PackedOrDeliverdOrderCanNotbeUpdated);
+
             var updaterId = userDescriptor.GetId();
             var items = new List<OrderItem>();
             var containsFragileItems = false;
@@ -60,7 +64,7 @@ namespace Project.Application.Aggregates.Orders.Commands.UpdateOrder
             }
 
             order.ChangeItems(items.ToArray(), validator);
-            order.ChangOrderPostType(containsFragileItems, updaterId);
+            order.ChangPostType(containsFragileItems, updaterId);
             order.ChangeDescription(Description.Create(request.Description), updaterId);
 
             return Unit.Value;

@@ -8,6 +8,8 @@ namespace Project.Application.Aggregates.Orders.Queries
 
         public string Status { get; set; }
         
+        public string Address { get; set; }
+        
         public string PostType { get; set; }
 
         public decimal TotalPrice { get; set; }

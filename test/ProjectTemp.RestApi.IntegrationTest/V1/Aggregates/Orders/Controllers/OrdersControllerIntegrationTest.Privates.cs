@@ -21,5 +21,14 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
                 ? null
                 : await response.ReadAsync<ResponseCollectionModel<OrderItemResponse>>();
         }
+
+        private async Task ChangeStatus(
+            Guid OrderId,
+            HttpStatusCode responseStatusCode = HttpStatusCode.NoContent)
+        {
+            var response = await client.PutAsJsonAsync($"{BaseUrl}/{OrderId}/ChangeStatus", null);
+
+            response.StatusCode.Should().Be(responseStatusCode);
+        }
     }
 }

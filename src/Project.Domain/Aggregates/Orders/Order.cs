@@ -5,6 +5,7 @@ using Project.Domain.Aggregates.Orders.Events;
 using Project.Domain.Aggregates.Orders.Rules;
 using Project.Domain.Aggregates.Orders.Services;
 using Project.Domain.Aggregates.Orders.ValueObjects;
+using Project.Domain.Aggregates.Users.ValueObjects;
 using Project.Domain.ValueObjects;
 
 namespace Project.Domain.Aggregates.Orders
@@ -21,6 +22,8 @@ namespace Project.Domain.Aggregates.Orders
         public OrderId Id { get; private set; }
 
         public Description Description { get; private set; }
+
+        public UserAddress Address { get; private set; }
 
         public OrderStatus Status { get; private set; }
 
@@ -66,7 +69,7 @@ namespace Project.Domain.Aggregates.Orders
             Status = status;
         }
 
-        public void ChangOrderPostType(bool containsFragileItem, Guid updaterId)
+        public void ChangPostType(bool containsFragileItem, Guid updaterId)
         {
             switch (containsFragileItem)
             {
@@ -84,6 +87,17 @@ namespace Project.Domain.Aggregates.Orders
             TrackUpdate(updaterId);
 
             PostType = postType;
+        }
+
+        public void ChangeAddress(UserAddress address, Guid updaterId)
+        {
+            if (Address == address)
+                return;
+
+            AddEvent(new OrderAddressChangedEvent(Id, Address, address));
+            TrackUpdate(updaterId);
+
+            Address = address;
         }
 
         public void ChangeDescription(Description description, Guid updaterId)

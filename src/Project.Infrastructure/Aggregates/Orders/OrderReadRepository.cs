@@ -23,6 +23,7 @@ namespace Project.Infrastructure.Aggregates.Orders
                     SELECT
 		                    O.""Id"",
 		                    O.""Status"",
+		                    O.""Address"",
 		                    O.""PostType"",
 		                    O.""Description"",
 		                    COALESCE ( UC.""Username"", O.""CreatorId"" :: TEXT ) AS ""Creator"",
@@ -58,6 +59,7 @@ namespace Project.Infrastructure.Aggregates.Orders
                     SELECT
 		                    O.""Id"",
 		                    O.""Status"",
+                            O.""Address"",
                             O.""PostType"",
 		                    O.""Description"",
 		                    COALESCE ( UC.""Username"", O.""CreatorId"" :: TEXT ) AS ""Creator"",

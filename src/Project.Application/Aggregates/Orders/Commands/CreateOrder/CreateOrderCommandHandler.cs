@@ -65,7 +65,7 @@ namespace Project.Application.Aggregates.Orders.Commands.CreateOrder
             var order = Order.Create(OrderId.Create(Guid.NewGuid()), creatorId, orderTimeValidator);
 
             order.ChangeItems(items.ToArray(), goodsTotalPriceValidator);
-            order.ChangOrderPostType(containsFragileItem, creatorId);
+            order.ChangPostType(containsFragileItem, creatorId);
             order.ChangeDescription(Description.Create(request.Description), creatorId);
 
             orderWriteRepository.Add(order);

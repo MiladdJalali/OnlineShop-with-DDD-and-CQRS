@@ -32,12 +32,12 @@ namespace Project.RestApi.IntegrationTest.SeedHelpers
 
         public static readonly Guid AdminUserId = Guid.NewGuid();
 
+        public const string AdminAddress = "string";
+
         private const string AdminUserUsername = "string";
 
         private static readonly string AdminUserPassword = "string".GetHash();
-
-        private const string AdminAddress = "string";
-
+        
         #endregion
     }
 }

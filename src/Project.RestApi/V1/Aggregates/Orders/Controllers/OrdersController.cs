@@ -6,6 +6,7 @@ using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Project.Application.Aggregates.Orders.Commands.ChangeOrderStatus;
 using Project.Application.Aggregates.Orders.Commands.CreateOrder;
 using Project.Application.Aggregates.Orders.Commands.DeleteOrder;
 using Project.Application.Aggregates.Orders.Commands.UpdateOrder;
@@ -108,10 +109,23 @@ namespace Project.RestApi.V1.Aggregates.Orders.Controllers
             return NoContent();
         }
 
+        [HttpPut("{orderId:guid}/ChangeStatus")]
+        public async Task<ActionResult> ChangeStatus(
+            Guid orderId,
+            CancellationToken cancellationToken)
+        {
+            await mediator
+                .Send(new ChangeOrderStatusCommand {OrderId = orderId}, cancellationToken)
+                .ConfigureAwait(false);
+
+            return NoContent();
+        }
+
         [HttpDelete("{orderId:guid}")]
         public async Task<ActionResult> DeleteOrder(Guid orderId, CancellationToken cancellationToken)
         {
-            await mediator.Send(new DeleteOrderCommand {Id = orderId}, cancellationToken)
+            await mediator
+                .Send(new DeleteOrderCommand {Id = orderId}, cancellationToken)
                 .ConfigureAwait(false);
 
             return Ok();

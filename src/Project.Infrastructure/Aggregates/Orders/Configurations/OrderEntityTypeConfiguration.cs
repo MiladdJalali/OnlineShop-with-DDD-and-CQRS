@@ -6,6 +6,7 @@ using Project.Domain.Aggregates.Goods.ValueObjects;
 using Project.Domain.Aggregates.Orders;
 using Project.Domain.Aggregates.Orders.Enums;
 using Project.Domain.Aggregates.Orders.ValueObjects;
+using Project.Domain.Aggregates.Users.ValueObjects;
 using Project.Domain.ValueObjects;
 
 namespace Project.Infrastructure.Aggregates.Orders.Configurations
@@ -23,6 +24,9 @@ namespace Project.Infrastructure.Aggregates.Orders.Configurations
 
             builder.Property(i => i.Description)
                 .HasConversion(i => i.Value, i => Description.Create(i));
+
+            builder.Property(i => i.Address)
+                .HasConversion(i => i.Value, i => UserAddress.Create(i));
 
             builder.Property(e => e.Status)
                 .HasConversion(
