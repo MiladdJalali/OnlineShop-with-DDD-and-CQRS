@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Project.Domain.Aggregates.Orders.Enums;
 using Project.Domain.Aggregates.Orders.Events;
 using Project.Domain.Aggregates.Orders.Rules;
@@ -25,6 +24,8 @@ namespace Project.Domain.Aggregates.Orders
 
         public OrderStatus Status { get; private set; }
 
+        public OrderPostType? PostType { get; private set; }
+
         public IEnumerable<OrderItem> OrderItems => orderItems.AsReadOnly();
 
         public static Order Create(
@@ -46,7 +47,7 @@ namespace Project.Domain.Aggregates.Orders
             OrderItem[] items,
             IGoodsTotalPriceValidator validator)
         {
-            CheckRule(new ItemsTotalPriceMustBeValidRule(items.Select(i => i.GoodId.Value), validator));
+            CheckRule(new ItemsTotalPriceMustBeValidRule(items, validator));
 
             orderItems.Clear();
 
@@ -63,6 +64,26 @@ namespace Project.Domain.Aggregates.Orders
             TrackUpdate(updaterId);
 
             Status = status;
+        }
+
+        public void ChangOrderPostType(bool containsFragileItem, Guid updaterId)
+        {
+            switch (containsFragileItem)
+            {
+                case true
+                    when PostType is OrderPostType.SpecialPost:
+                case false
+                    when PostType is OrderPostType.OrdinaryPost:
+                    return;
+            }
+
+            var postType =
+                containsFragileItem ? OrderPostType.SpecialPost : OrderPostType.OrdinaryPost;
+
+            AddEvent(new OrderPostTypeChangedEvent(Id, PostType, postType));
+            TrackUpdate(updaterId);
+
+            PostType = postType;
         }
 
         public void ChangeDescription(Description description, Guid updaterId)
@@ -90,7 +111,7 @@ namespace Project.Domain.Aggregates.Orders
             if (orderItems.Contains(item))
                 return;
 
-            AddEvent(new OrderItemAddedEvent(Id, item.GoodId, item.OrderPostType, item.Count));
+            AddEvent(new OrderItemAddedEvent(Id, item.GoodId, item.Count));
 
             orderItems.Add(item);
         }

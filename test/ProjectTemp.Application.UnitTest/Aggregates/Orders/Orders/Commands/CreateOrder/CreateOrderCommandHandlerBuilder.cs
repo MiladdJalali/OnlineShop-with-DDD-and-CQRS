@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -8,19 +7,19 @@ using Project.Application.Aggregates.Orders;
 using Project.Application.Aggregates.Orders.Commands.CreateOrder;
 using Project.Application.Services;
 using Project.Domain.Aggregates.Orders.Services;
+using Project.Domain.Aggregates.Orders.ValueObjects;
 using Project.Domain.UnitTest.Aggregates.Goods.Builders;
 
 namespace Project.Application.UnitTest.Aggregates.Orders.Orders.Commands.CreateOrder
 {
     public class CreateOrderCommandHandlerBuilder
     {
-        private readonly IUserDescriptor userDescriptor;
-
         private readonly IGoodsTotalPriceValidator goodsTotalPriceValidator;
 
-        private IGoodWriteRepository goodWriteRepository;
-
         private readonly IOrderTimeValidator orderTimeValidator;
+        private readonly IUserDescriptor userDescriptor;
+
+        private IGoodWriteRepository goodWriteRepository;
 
         public CreateOrderCommandHandlerBuilder()
         {
@@ -34,7 +33,7 @@ namespace Project.Application.UnitTest.Aggregates.Orders.Orders.Commands.CreateO
                 .ReturnsAsync(good);
 
             var goodsTotalPriceValidatorMock = new Mock<IGoodsTotalPriceValidator>();
-            goodsTotalPriceValidatorMock.Setup(i => i.IsTotalPriceValid(It.IsAny<IEnumerable<Guid>>()))
+            goodsTotalPriceValidatorMock.Setup(i => i.IsTotalPriceValid(It.IsAny<OrderItem[]>()))
                 .Returns(Task.FromResult(true));
 
             var orderTimeValidatorMock = new Mock<IOrderTimeValidator>();
@@ -60,6 +59,5 @@ namespace Project.Application.UnitTest.Aggregates.Orders.Orders.Commands.CreateO
             goodWriteRepository = value;
             return this;
         }
-
     }
 }

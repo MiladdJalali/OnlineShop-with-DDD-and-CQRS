@@ -2,8 +2,8 @@
 {
     public enum OrderPostType
     {
-        OrdinaryPost = 0,
+        SpecialPost = 0,
 
-        SpecialPost = 1
+        OrdinaryPost = 1
     }
 }

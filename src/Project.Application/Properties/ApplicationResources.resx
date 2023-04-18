@@ -133,7 +133,7 @@
     <value>Unable to find order</value>
   </data>
   <data name="Order_UnableToFindGood" xml:space="preserve">
-    <value>Unable to find good {0}</value>
+    <value>Unable to find {0}</value>
   </data>
   <data name="User_PasswordAndConfirmPasswordDoesNotMatch" xml:space="preserve">
     <value>Password and confirm password does not match</value>

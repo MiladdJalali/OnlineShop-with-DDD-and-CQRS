@@ -1,5 +1,6 @@
 ﻿using System;
 using MediatR;
+using Project.Application.Aggregates.Orders.Commands.Models;
 
 namespace Project.Application.Aggregates.Orders.Commands.UpdateOrder
 {
@@ -7,7 +8,7 @@ namespace Project.Application.Aggregates.Orders.Commands.UpdateOrder
     {
         public Guid OrderId { get; set; }
 
-        public string[] GoodsName { get; set; }
+        public OrderGoodsCommandModel[] Goods { get; set; }
 
         public string Description { get; set; }
     }

@@ -29,19 +29,28 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
             // Create
             var createRequest = new OrderRequest
             {
-                GoodsName = new[] { GoodDataSeeder.FirstGoodName, GoodDataSeeder.SecondGoodName },
+                Goods = new[]
+                {
+                    new OrderGoodRequest {Name = GoodDataSeeder.FirstGoodName, Count = 1},
+                    new OrderGoodRequest {Name = GoodDataSeeder.SecondGoodName, Count = 2}
+                },
                 Description = nameof(OrderRequest.Description)
             };
 
             var createResponse = await Create<OrderResponse>(createRequest);
 
             createResponse.Status.Should().Be(OrderStatus.Received.ToString());
+            createResponse.PostType.Should().Be(OrderPostType.SpecialPost.ToString());
+            createResponse.TotalPrice.Should().Be(106000);
             createResponse.Description.Should().Be(createRequest.Description);
 
             // Update
             var updateRequest = new OrderRequest
             {
-                GoodsName = new[] { GoodDataSeeder.FirstGoodName },
+                Goods = new[]
+                {
+                    new OrderGoodRequest {Name = GoodDataSeeder.FirstGoodName, Count = 1}
+                },
                 Description = $"{nameof(OrderRequest.Description)}Updated"
             };
 
@@ -56,6 +65,11 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
             var getAllResponse = await GetAll<OrderResponse>(getAllParameters);
 
             getAllResponse.Values.Should().HaveCount(1);
+            getAllResponse.Values.First().Status.Should().Be(OrderStatus.Received.ToString());
+            getAllResponse.Values.First().PostType.Should().Be(OrderPostType.OrdinaryPost.ToString());
+            getAllResponse.Values.First().TotalPrice.Should().Be(90000);
+            getAllResponse.Values.First().Description.Should().Be(updateRequest.Description);
+
             getAllResponse.TotalCount.Should().Be(1);
 
             // GetItems
@@ -77,7 +91,10 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
         {
             var createRequest = new OrderRequest
             {
-                GoodsName = new[] { GoodDataSeeder.SecondGoodName },
+                Goods = new[]
+                {
+                    new OrderGoodRequest {Name = GoodDataSeeder.SecondGoodName, Count = 2}
+                },
                 Description = nameof(OrderRequest.Description)
             };
 

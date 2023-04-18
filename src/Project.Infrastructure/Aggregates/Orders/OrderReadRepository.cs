@@ -23,6 +23,7 @@ namespace Project.Infrastructure.Aggregates.Orders
                     SELECT
 		                    O.""Id"",
 		                    O.""Status"",
+		                    O.""PostType"",
 		                    O.""Description"",
 		                    COALESCE ( UC.""Username"", O.""CreatorId"" :: TEXT ) AS ""Creator"",
 		                    COALESCE ( UU.""Username"", O.""UpdaterId"" :: TEXT ) AS ""Updater"",
@@ -41,7 +42,7 @@ namespace Project.Infrastructure.Aggregates.Orders
 						                    O.""Id"",
 						                    G.""Price"",
 						                    G.""Discount"",
-						                    ( G.""Price"" - ( G.""Price"" * ( G.""Discount"" / 100 ) ) ) :: INT AS ""TotalPrice""
+						                    ((G.""Price"" - (G.""Price"" * ( G.""Discount"" / 100 ))) * OI.""Count"") :: INT AS ""TotalPrice""
 				                    FROM
 						                    ""Orders"" AS O
 						                    INNER JOIN ""OrderItems"" AS OI ON O.""Id"" = OI.""OrderId""
@@ -57,6 +58,7 @@ namespace Project.Infrastructure.Aggregates.Orders
                     SELECT
 		                    O.""Id"",
 		                    O.""Status"",
+                            O.""PostType"",
 		                    O.""Description"",
 		                    COALESCE ( UC.""Username"", O.""CreatorId"" :: TEXT ) AS ""Creator"",
 		                    COALESCE ( UU.""Username"", O.""UpdaterId"" :: TEXT ) AS ""Updater"",
@@ -75,7 +77,7 @@ namespace Project.Infrastructure.Aggregates.Orders
 						                    O.""Id"",
 						                    G.""Price"",
 						                    G.""Discount"",
-						                    ( G.""Price"" - ( G.""Price"" * ( G.""Discount"" / 100 ) ) ) :: INT AS ""TotalPrice""
+						                    ((G.""Price"" - (G.""Price"" * ( G.""Discount"" / 100 ))) * OI.""Count"") :: INT AS ""TotalPrice""
 				                    FROM
 						                    ""Orders"" AS O
 						                    INNER JOIN ""OrderItems"" AS OI ON O.""Id"" = OI.""OrderId""

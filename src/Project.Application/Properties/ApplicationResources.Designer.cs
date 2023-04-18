@@ -106,7 +106,7 @@ namespace Project.Application.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find good {0}.
+        ///   Looks up a localized string similar to Unable to find {0}.
         /// </summary>
         public static string Order_UnableToFindGood {
             get {

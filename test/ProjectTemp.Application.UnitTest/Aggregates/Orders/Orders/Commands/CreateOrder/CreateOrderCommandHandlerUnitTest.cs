@@ -35,7 +35,7 @@ namespace Project.Application.UnitTest.Aggregates.Orders.Orders.Commands.CreateO
             var func = new Func<Task>(async () => await commandHandler
                 .Handle(command, CancellationToken.None));
 
-            goodWriteRepository.Setup(i => i.GetByName(command.GoodsName.First(), CancellationToken.None))
+            goodWriteRepository.Setup(i => i.GetByName(command.Goods.First().Name, CancellationToken.None))
                 .Returns(() => null);
 
             func.Should().ThrowAsync<DomainException>()
