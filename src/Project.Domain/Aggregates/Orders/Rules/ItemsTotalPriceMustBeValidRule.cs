@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using Project.Domain.Aggregates.Orders.Services;
+﻿using Project.Domain.Aggregates.Orders.Services;
+using Project.Domain.Aggregates.Orders.ValueObjects;
 using Project.Domain.Properties;
 
 namespace Project.Domain.Aggregates.Orders.Rules
 {
     internal class ItemsTotalPriceMustBeValidRule : IBusinessRule
     {
-        private readonly IEnumerable<Guid> goodIds;
+        private readonly OrderItem[] items;
 
         private readonly IGoodsTotalPriceValidator validator;
 
-        internal ItemsTotalPriceMustBeValidRule(IEnumerable<Guid> goodIds, IGoodsTotalPriceValidator validator)
+        internal ItemsTotalPriceMustBeValidRule(OrderItem[] items, IGoodsTotalPriceValidator validator)
         {
-            this.goodIds = goodIds;
+            this.items = items;
             this.validator = validator;
         }
 
@@ -23,7 +22,7 @@ namespace Project.Domain.Aggregates.Orders.Rules
 
         public bool IsBroken()
         {
-            return !validator.IsTotalPriceValid(goodIds).GetAwaiter().GetResult();
+            return !validator.IsTotalPriceValid(items).GetAwaiter().GetResult();
         }
     }
 }

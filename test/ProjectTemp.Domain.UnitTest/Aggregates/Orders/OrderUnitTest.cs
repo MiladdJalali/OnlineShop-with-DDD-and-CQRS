@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -251,7 +250,7 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
             var secondOrderItem = OrderItem.Create(GoodId.Create(Guid.NewGuid()), 1);
 
             var validator = new Mock<IGoodsTotalPriceValidator>();
-            validator.Setup(i => i.IsTotalPriceValid(It.IsAny<IEnumerable<Guid>>())).Returns(Task.FromResult(true));
+            validator.Setup(i => i.IsTotalPriceValid(It.IsAny<OrderItem[]>())).Returns(Task.FromResult(true));
 
             var order = new OrderBuilder().Build();
 
@@ -272,7 +271,7 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
             var firstOrderItem = OrderItem.Create(GoodId.Create(Guid.NewGuid()), 2);
 
             var validator = new Mock<IGoodsTotalPriceValidator>();
-            validator.Setup(i => i.IsTotalPriceValid(It.IsAny<IEnumerable<Guid>>())).Returns(Task.FromResult(true));
+            validator.Setup(i => i.IsTotalPriceValid(It.IsAny<OrderItem[]>())).Returns(Task.FromResult(true));
 
             var order = new OrderBuilder().Build();
 

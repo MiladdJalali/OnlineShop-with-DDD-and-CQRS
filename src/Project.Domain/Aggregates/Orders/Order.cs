@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Project.Domain.Aggregates.Orders.Enums;
 using Project.Domain.Aggregates.Orders.Events;
 using Project.Domain.Aggregates.Orders.Rules;
@@ -48,7 +47,7 @@ namespace Project.Domain.Aggregates.Orders
             OrderItem[] items,
             IGoodsTotalPriceValidator validator)
         {
-            CheckRule(new ItemsTotalPriceMustBeValidRule(items.Select(i => i.GoodId.Value), validator));
+            CheckRule(new ItemsTotalPriceMustBeValidRule(items, validator));
 
             orderItems.Clear();
 

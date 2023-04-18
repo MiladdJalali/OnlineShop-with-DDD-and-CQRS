@@ -10,7 +10,7 @@ namespace Project.RestApi.V1.Aggregates.Orders.Models
         
         public string PostType { get; set; }
 
-        public decimal TotalPrice { get; private set; }
+        public decimal TotalPrice { get; set; }
 
         public string Description { get; set; }
 

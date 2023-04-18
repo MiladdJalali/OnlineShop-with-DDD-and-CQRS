@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Project.Domain.Aggregates.Orders.ValueObjects;
 
 namespace Project.Domain.Aggregates.Orders.Services
 {
     public interface IGoodsTotalPriceValidator
     {
-        Task<bool> IsTotalPriceValid(IEnumerable<Guid> goodIds);
+        Task<bool> IsTotalPriceValid(OrderItem[] goods);
     }
 }

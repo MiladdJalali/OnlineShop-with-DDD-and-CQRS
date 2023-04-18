@@ -2,7 +2,7 @@
 {
     public class OrderRequest
     {
-        public string[] GoodsName { get; set; }
+        public OrderGoodRequest[] Goods { get; set; }
 
         public string Description { get; set; }
     }

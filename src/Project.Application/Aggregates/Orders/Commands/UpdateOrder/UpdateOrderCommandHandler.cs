@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -47,13 +46,14 @@ namespace Project.Application.Aggregates.Orders.Commands.UpdateOrder
             var updaterId = userDescriptor.GetId();
             var items = new List<OrderItem>();
             var containsFragileItems = false;
-            foreach (var name in request.GoodsName.Distinct())
-            {
-                var good = await goodWriteRepository.GetByName(name, cancellationToken).ConfigureAwait(false);
-                if (good == null)
-                    throw new DomainException(string.Format(ApplicationResources.Order_UnableToFindGood, name));
 
-                items.Add(OrderItem.Create(good.Id, request.GoodsName.Select(i => i == name).Count()));
+            foreach (var orderGood in request.Goods)
+            {
+                var good = await goodWriteRepository.GetByName(orderGood.Name, cancellationToken).ConfigureAwait(false);
+                if (good == null)
+                    throw new DomainException(string.Format(ApplicationResources.Order_UnableToFindGood, orderGood.Name));
+
+                items.Add(OrderItem.Create(good.Id, orderGood.Count));
 
                 if (good.IsFragile.Value)
                     containsFragileItems = true;

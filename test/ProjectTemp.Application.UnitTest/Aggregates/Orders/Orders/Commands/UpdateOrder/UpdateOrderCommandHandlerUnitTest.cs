@@ -26,7 +26,7 @@ namespace Project.Application.UnitTest.Aggregates.Orders.Orders.Commands.UpdateO
                 .Handle(command, CancellationToken.None));
 
             goodWriteRepository.Setup(i =>
-                i.GetByName(command.GoodsName.First(), CancellationToken.None)).Returns(() => null);
+                i.GetByName(command.Goods.First().Name, CancellationToken.None)).Returns(() => null);
 
             func.Should().ThrowAsync<DomainException>()
                 .WithMessage(ApplicationResources.Order_UnableToFindGood);
