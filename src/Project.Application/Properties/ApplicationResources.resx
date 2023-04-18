@@ -129,17 +129,20 @@
   <data name="Good_UnableToUpdateSystemDefined" xml:space="preserve">
     <value>Unable to update system defined goods</value>
   </data>
-  <data name="Order_InvalidStatusProvided" xml:space="preserve">
-    <value>Invalid status provided</value>
+  <data name="Order_DeliveredOrderStatusCanNotBeChanged" xml:space="preserve">
+    <value>Delivered order status can not be changed</value>
   </data>
   <data name="Order_PackedOrDeliverdOrderCanNotbeUpdated" xml:space="preserve">
-    <value>Packed or deliverd order can not be updated</value>
+    <value>Packed or delivered order can not be updated</value>
   </data>
   <data name="Order_UnableToFind" xml:space="preserve">
     <value>Unable to find order</value>
   </data>
   <data name="Order_UnableToFindGood" xml:space="preserve">
     <value>Unable to find {0}</value>
+  </data>
+  <data name="Order_UserDoesNotExist" xml:space="preserve">
+    <value>User does not exist</value>
   </data>
   <data name="User_PasswordAndConfirmPasswordDoesNotMatch" xml:space="preserve">
     <value>Password and confirm password does not match</value>

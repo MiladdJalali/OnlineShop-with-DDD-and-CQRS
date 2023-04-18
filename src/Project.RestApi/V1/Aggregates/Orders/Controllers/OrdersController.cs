@@ -112,13 +112,11 @@ namespace Project.RestApi.V1.Aggregates.Orders.Controllers
         [HttpPut("{orderId:guid}/ChangeStatus")]
         public async Task<ActionResult> ChangeStatus(
             Guid orderId,
-            ChangeOrderStatusRequest request,
             CancellationToken cancellationToken)
         {
-            var command = request.Adapt<ChangeOrderStatusCommand>();
-            command.OrderId = orderId;
-
-            await mediator.Send(command, cancellationToken).ConfigureAwait(false);
+            await mediator
+                .Send(new ChangeOrderStatusCommand {OrderId = orderId}, cancellationToken)
+                .ConfigureAwait(false);
 
             return NoContent();
         }
@@ -126,7 +124,8 @@ namespace Project.RestApi.V1.Aggregates.Orders.Controllers
         [HttpDelete("{orderId:guid}")]
         public async Task<ActionResult> DeleteOrder(Guid orderId, CancellationToken cancellationToken)
         {
-            await mediator.Send(new DeleteOrderCommand {Id = orderId}, cancellationToken)
+            await mediator
+                .Send(new DeleteOrderCommand {Id = orderId}, cancellationToken)
                 .ConfigureAwait(false);
 
             return Ok();

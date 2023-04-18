@@ -24,10 +24,9 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
 
         private async Task ChangeStatus(
             Guid OrderId,
-            ChangeOrderStatusRequest request,
             HttpStatusCode responseStatusCode = HttpStatusCode.NoContent)
         {
-            var response = await client.PutAsJsonAsync($"{BaseUrl}/{OrderId}/ChangeStatus", request);
+            var response = await client.PutAsJsonAsync($"{BaseUrl}/{OrderId}/ChangeStatus", null);
 
             response.StatusCode.Should().Be(responseStatusCode);
         }

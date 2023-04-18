@@ -8,6 +8,7 @@ using Project.Domain.Aggregates.Orders.Enums;
 using Project.Domain.Aggregates.Orders.Events;
 using Project.Domain.Aggregates.Orders.Services;
 using Project.Domain.Aggregates.Orders.ValueObjects;
+using Project.Domain.Aggregates.Users.ValueObjects;
 using Project.Domain.Exceptions;
 using Project.Domain.UnitTest.Aggregates.Orders.Builders;
 using Project.Domain.UnitTest.Helpers;
@@ -35,9 +36,10 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
 
             createdEvent.AggregateId.Should().Be(orderId);
             createdEvent.Status.Should().Be(OrderStatus.Received.ToString());
-
+            
             order.Id.Value.Should().Be(orderId);
             order.Status.Should().Be(OrderStatus.Received);
+            order.Address.Should().BeNull();
             order.Description.Should().BeNull();
             order.CreatorId.Should().Be(userId);
         }
@@ -241,6 +243,38 @@ namespace Project.Domain.UnitTest.Aggregates.Orders
             orderPostTypeChangedEvent.AggregateId.Should().Be(order.Id.Value);
             orderPostTypeChangedEvent.OldValue.Should().Be(OrderPostType.SpecialPost.ToString());
             orderPostTypeChangedEvent.NewValue.Should().Be(OrderPostType.OrdinaryPost.ToString());
+        }
+
+        [Fact]
+        public void TestChangeAddress_WhenEverythingIsOk_ValueMustBeSet()
+        {
+            const string address = "OrderAddress";
+            var order = new OrderBuilder().Build();
+
+            order.ClearEvents();
+            order.ChangeAddress(UserAddress.Create(address), Guid.NewGuid());
+
+            var addressChangedEvent = order.AssertPublishedDomainEvent<OrderAddressChangedEvent>();
+
+            order.Address.Value.Should().Be(address);
+
+            addressChangedEvent.AggregateId.Should().Be(order.Id.Value);
+            addressChangedEvent.OldValue.Should().BeNull();
+            addressChangedEvent.NewValue.Should().Be(address);
+        }
+
+        [Fact]
+        public void TestChangeAddress_WhenValueIsSame_NothingMustBeHappened()
+        {
+            const string address = "OrderAddress";
+            var order = new OrderBuilder().Build();
+
+            order.ChangeAddress(UserAddress.Create(address), Guid.NewGuid());
+            order.ClearEvents();
+
+            order.ChangeAddress(UserAddress.Create(address), Guid.NewGuid());
+
+            order.DomainEvents.Should().BeEmpty();
         }
 
         [Fact]

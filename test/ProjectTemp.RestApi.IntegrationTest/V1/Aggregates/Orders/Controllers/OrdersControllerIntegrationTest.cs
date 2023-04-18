@@ -41,6 +41,7 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
 
             createResponse.Status.Should().Be(OrderStatus.Received.ToString());
             createResponse.PostType.Should().Be(OrderPostType.SpecialPost.ToString());
+            createResponse.Address.Should().BeNull();
             createResponse.TotalPrice.Should().Be(106000);
             createResponse.Description.Should().Be(createRequest.Description);
 
@@ -67,6 +68,7 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
             getAllResponse.Values.Should().HaveCount(1);
             getAllResponse.Values.First().Status.Should().Be(OrderStatus.Received.ToString());
             getAllResponse.Values.First().PostType.Should().Be(OrderPostType.OrdinaryPost.ToString());
+            getAllResponse.Values.First().Address.Should().BeNull();
             getAllResponse.Values.First().TotalPrice.Should().Be(90000);
             getAllResponse.Values.First().Description.Should().Be(updateRequest.Description);
 
@@ -83,12 +85,19 @@ namespace Project.RestApi.IntegrationTest.V1.Aggregates.Orders.Controllers
             getItemsResponse.Values.First().Name.Should().Be(GoodDataSeeder.FirstGoodName);
             getItemsResponse.Values.First().Description.Should().BeNull();
 
-            // ChangeStatus
-            var changeOrderStatusRequest = new ChangeOrderStatusRequest {Status = OrderStatus.Packed.ToString()};
-            await ChangeStatus(createResponse.Id, changeOrderStatusRequest);
+            // ChangeStatusToPacked
+            await ChangeStatus(createResponse.Id);
 
             var orderResponse = await GetByIdentifier<OrderResponse>(createResponse.Id.ToString());
             orderResponse.Status.Should().Be(OrderStatus.Packed.ToString());
+            orderResponse.Address.Should().Be(UserDataSeeder.AdminAddress);
+
+            // ChangeStatusToDelivered
+            await ChangeStatus(createResponse.Id);
+
+            orderResponse = await GetByIdentifier<OrderResponse>(createResponse.Id.ToString());
+            orderResponse.Status.Should().Be(OrderStatus.Delivered.ToString());
+            orderResponse.Address.Should().Be(UserDataSeeder.AdminAddress);
 
             await Delete(createResponse.Id.ToString());
         }

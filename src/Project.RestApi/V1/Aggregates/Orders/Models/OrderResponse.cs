@@ -8,6 +8,8 @@ namespace Project.RestApi.V1.Aggregates.Orders.Models
 
         public string Status { get; set; }
         
+        public string Address{ get; set; }
+        
         public string PostType { get; set; }
 
         public decimal TotalPrice { get; set; }

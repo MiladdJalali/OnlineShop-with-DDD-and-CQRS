@@ -97,16 +97,16 @@ namespace Project.Application.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid status provided.
+        ///   Looks up a localized string similar to Delivered order status can not be changed.
         /// </summary>
-        public static string Order_InvalidStatusProvided {
+        public static string Order_DeliveredOrderStatusCanNotBeChanged {
             get {
-                return ResourceManager.GetString("Order_InvalidStatusProvided", resourceCulture);
+                return ResourceManager.GetString("Order_DeliveredOrderStatusCanNotBeChanged", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Packed or deliverd order can not be updated.
+        ///   Looks up a localized string similar to Packed or delivered order can not be updated.
         /// </summary>
         public static string Order_PackedOrDeliverdOrderCanNotbeUpdated {
             get {
@@ -129,6 +129,15 @@ namespace Project.Application.Properties {
         public static string Order_UnableToFindGood {
             get {
                 return ResourceManager.GetString("Order_UnableToFindGood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User does not exist.
+        /// </summary>
+        public static string Order_UserDoesNotExist {
+            get {
+                return ResourceManager.GetString("Order_UserDoesNotExist", resourceCulture);
             }
         }
         
