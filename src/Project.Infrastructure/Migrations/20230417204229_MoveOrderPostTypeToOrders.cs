@@ -14,8 +14,21 @@ namespace Project.Infrastructure.Migrations
                 name: "PostType",
                 table: "Orders",
                 type: "text",
-                nullable: false,
-                defaultValue: "");
+                nullable: true);
+
+            migrationBuilder.Sql(@"UPDATE ""Orders"" AS O SET ""PostType"" = 
+                                    (CASE 
+                                          WHEN (SELECT count(*) FROM ""Goods"" AS G 
+						                                    JOIN   ""OrderItems"" AS OI ON OI.""GoodId"" = G.""Id"" 
+						                                    WHERE OI.""OrderId"" = O.""Id"" AND G.""IsFragile"" ) > 0  THEN 'SpecialPost'
+                                          ELSE 'OrdinaryPost'
+                                    END)");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "PostType",
+                table: "Orders",
+                type: "text",
+                nullable: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
